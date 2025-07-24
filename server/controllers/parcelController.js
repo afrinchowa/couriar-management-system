@@ -72,3 +72,22 @@ exports.updateLocation = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+exports.updateStatus = async (req, res) => {
+  try {
+    const parcel = await Parcel.findById(req.params.id);
+    if (!parcel) return res.status(404).json({ message: "Not found" });
+
+    parcel.status = req.body.status;
+    await parcel.save();
+
+    const io = req.app.get("io");
+    io.emit("statusUpdate", {
+      parcelId: parcel._id,
+      status: parcel.status
+    });
+
+    res.json({ message: "Status updated", status: parcel.status });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

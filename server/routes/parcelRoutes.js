@@ -18,5 +18,6 @@ router.put("/:id", protect(["admin"]), updateParcel);
 router.delete("/:id", protect(["admin"]), deleteParcel);
 const { updateLocation } = require("../controllers/parcelController");
 router.put("/:id/location", protect(["agent"]), updateLocation);
+router.put("/:id/status", protect(["agent"]), updateStatus);
 
 module.exports = router;
